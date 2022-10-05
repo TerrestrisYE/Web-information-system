@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>profile</title>
+
+  <link rel="stylesheet" href="../bootstrap/bootstrap-5.2.0-beta1-dist/css/bootstrap.css">
+  <link rel="stylesheet" href="../bootstrap/bootstrap-5.2.0-beta1-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/profile.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css">
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+
+<body style="padding-top: 80px;">
+
+  <section>
+    <!-- navigation -->
+    <nav class="navbar navbar-expand-lg bg-light fixed-top border-bottom">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <img src="../img/Logo.png" alt="" width="140" height="60">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav ms-5">
+            <a class="nav-link ms-3 " aria-current="page" href="/home"><i class="bi bi-house-heart"
+                style="font-size:2.5rem;"></i>Home</a>
+            <a class="nav-link ms-3" href="#"><i class="bi bi-grid" style="font-size:2.5rem"></i>Classify</a>
+            <a class="nav-link ms-3" href="/ask"><i class="bi bi-plus-circle" style="font-size:2.5rem"></i>Ask</a>
+            <a class="nav-link  ms-3 active" href="/profile"><i class="bi bi-person"
+                style="font-size:2.6rem; color:blueviolet;"></i>User</a>
+          </div>
+          <a  id="logoutBtn" style="color:darkslategrey ; margin-left: 10rem;font-size: 1rem;"><i class="bi bi-box-arrow-right" style="font-size: 2.5rem; color: darkslategrey;"></i>Logout</a>
+        </div>
+      </div>
+    </nav>
+  </section>
+
+  <!-- user"s data -->
+  <div class="userdata">
+
+    <div class="left">
+      <div class="imgData">
+        <div>
+          <img src="../img/pic1.jpg" alt="" class="imgbox" id="imgbox">
+        </div>
+        <form method="post" enctype="multipart/form-data" id="uploadImage" action="/api/user/upload">
+          <div class="btnbox" id="btnbox" style="position: relative;">
+            <button class="btnimg" id="btnimg" style="border: none;">upload</button>
+            <input type="file" name="profilePhoto" id="imgfile" style="position: absolute;left:0;top: 0;opacity: 0">
+            <button type="submit" id="formSubmit" style="border: none;" >Submit</button>
+          </div>
+        </form>
+      </div>
+      <div class="data">
+        <div class="datarow">
+          <p class="wl">Email </p>
+          <input class="name" id="email" type="text" disabled="true">
+        </div>
+        <div class="datarow">
+          <p class="wl">Name </p>
+          <input class="name" id="name" type="text" disabled="true">
+        </div>
+
+
+
+      </div>
+      <div class="submitdiv" id="submitdiv">
+        <button type="submit" id="editsubmit" class="editsubmit" onclick="submitEditEmail()">submit</button>
+      </div>
+
+
+    </div>
+
+    <div class="right">
+      <!-- <div class="fanNum righticon">
+        <p class="fan" id="fan">12</p>
+        <p>fan</p>
+      </div> -->
+      <div class="write righticon" id="write">
+        <div onclick="editData()"><i class="bi bi-pencil-square" style="font-size: 2rem;"></i></div>
+        <div class="quick" id="quick" onclick="quitEdit()">
+          <p>Cancel</p>
+        </div>
+      </div>
+      <div class="message righticon" id="message">
+        <i class="bi bi-chat-left-text-fill" style="font-size: 2rem;"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- ask bar -->
+  <section class="ackbar">
+    <h5>ask
+      <div class="icon" id="iconA" onclick="showAskBox()">
+        <i class="bi bi-caret-down-fill" style="font-size: 2rem;"></i>
+      </div>
+    </h5>
+  </section>
+
+  <!-- ask box -->
+  <div class="askBox" id="askBox">
+  </div>
+
+  <!-- anwser bar -->
+  <section class="answerbar">
+    <h5>answers
+      <div class="icon" id="iconB" onclick="showAnwsersBox()">
+        <i class="bi bi-caret-down-fill" style="font-size: 2rem;"></i>
+      </div>
+    </h5>
+  </section>
+
+  <!-- anwsers box -->
+  <div class="anwsersBox" id="anwsersBox">
+
+  </div>
+
+  <!-- collections bar -->
+  <section class="collectionsbar" id="collectionsbar">
+    <h5>collections
+      <div class="icon" id="iconC" onclick="showCollectionsBox()">
+        <i class="bi bi-caret-down-fill" style="font-size: 2rem;"></i>
+      </div>
+    </h5>
+  </section>
+
+  <!-- collections box -->
+  <div class="collectionsBox" id="collectionsBox">
+
+  </div>
+
+  <footer class="p-5 bg-dark text-white text-center">
+    <div class="container">
+      <p class="lead">Copyright &copy; 3$#####@gmal.com</p>
+    </div>
+  </footer>
+
+  <script>
+
+     //create dom to put the ask data
+     function createDOM(userImgD,userNameD,tagD,titleD,contentD){
+      var askItem = document.createElement("div");
+      askItem.className = "askItem";
+
+      var user = document.createElement("div");
+      user.className = "user";
+
+      var askdata = document.createElement("div");
+      askdata.className = "askdata";
+
+      askItem.appendChild(user);
+      askItem.appendChild(askdata);
+
+      var userimg =  document.createElement("div");
+      userimg.className = "userimg";
+      var img = document.createElement("img");
+      img.src = userImgD;
+      userimg.appendChild(img);
+
+      var username = document.createElement("div");
+      username.className = "username";
+      username.innerHTML = userNameD;
+
+      user.appendChild(userimg);
+      user.appendChild(username);
+
+      var tag = document.createElement("div");
+      tag.className = "tag";
+      var h1 = document.createElement("h5");
+      h1.innerHTML = tagD;
+      tag.appendChild(h1);
+
+      var title = document.createElement("div");
+      title.className = "title";
+      var h2 = document.createElement("h6");
+      h2.innerHTML = titleD;
+      title.appendChild(h2);
+
+      var content = document.createElement("div");
+      content.className = "content";
+      var h3 = document.createElement("h6");
+      h3.innerHTML = contentD;
+      content.appendChild(h3);
+      
+      askdata.appendChild(tag);
+      askdata.appendChild(title);
+      askdata.appendChild(content);
+      return askItem;
+
+    }
+
+    function getProfilePhoto() {
+        var url = "/api/user/profilePhoto";
+        axios.get(url).then(
+          response => {
+            console.log(response);
+            var img = document.getElementById("imgbox");
+            img.src = response.data.url;
+          }
+        ).catch(
+          err => {
+            console.log(err);
+            if (err.response.status == 401 || err.response.status == 403) {
+              window.confirm(err.response.data.message);
+            }
+          }
+        )
+     }
+
+    function getAskData(){
+      var url = "/api/question/getQuestions";
+      axios.get(url)
+      .then(response=>{
+        console.log(response);
+        var datalist = response.data;
+        askBox = document.getElementById("askBox");
+        askBox.innerHTML = "";
+        console.log(datalist.length)
+        for(let i=0;i<datalist.length;i++){
+          var userImgD = datalist[i].imgsrc;
+          var userNameD = datalist[i].username;
+          var tagD = datalist[i].tag;
+          var titleD = datalist[i].title;
+          var contentD = datalist[i].content;
+          //create the ask box
+          var askItem = createDOM(userImgD,userNameD,tagD,titleD,contentD);
+          var answerDataa =  datalist[i].answers;
+          //append the answers in the ask box
+          for(let j=0;j<answerDataa.length;j++){
+            var answerItem = document.createElement("div");
+            answerItem.className = "answers";
+            var answerName = document.createElement("div");
+            answerName.className = "answerName";
+            answerName.innerHTML = answerDataa[i].Name;
+            var answerContent = document.createElement("div");
+            answerContent.className = "answerContent";
+            answerContent.innerHTML = answerDataa[i].Content;
+            answerItem.appendChild(answerName);
+            answerItem.appendChild(answerContent);
+            askItem.appendChild(answerItem);
+          }
+          askBox.appendChild(askItem);
+        }
+
+      })
+      .catch(err=>{
+        console.log(err);
+      })
+    }
+
+    window.onload = function () {
+      var url = "/api/user/getProfile";
+      axios.get(url)
+        .then(response => {
+          console.log(response);
+          document.getElementById("email").value = response.data.email;
+          document.getElementById("name").value = response.data.username;
+        })
+        .catch(err => {
+          console.log(err);
+          if (err.response.status == 401 || err.response.status == 403) {
+            window.confirm(err.response.data.message);
+            window.location.href = "/login";
+          }
+        })
+
+      getProfilePhoto();
+    }
+
+
+    var anwsersBox = document.getElementById("anwsersBox");
+    var collectionsBox = document.getElementById("collectionsBox");
+    var askBox = document.getElementById("askBox");
+    var iconA = document.getElementById("iconA");
+    var iconB = document.getElementById("iconB");
+    var iconC = document.getElementById("iconC");
+    var submitdiv = document.getElementById("submitdiv");
+    var btnbox = document.getElementById("btnbox");
+    var quick = document.getElementById("quick");
+
+    quick.style.display = "none";
+    submitdiv.style.display = 'none';
+    btnbox.style.display = "none";
+
+    askBox.style.display = "none";
+    anwsersBox.style.display = 'none';
+    collectionsBox.style.display = 'none';
+
+    function showAskBox(){
+      if(askBox.style.display == 'none') {
+        askBox.style.display = 'block';
+        iconA.style.transform = "rotate(180deg)";
+        getAskData()
+      }
+      else{
+        askBox.style.display = 'none';
+        iconA.style.removeProperty("transform");
+      }
+    }
+
+    function showAnwsersBox(){
+      if(anwsersBox.style.display == 'none') {
+        anwsersBox.style.display = 'block';
+        iconB.style.transform = "rotate(180deg)";
+      }
+      else{
+        anwsersBox.style.display = 'none';
+        iconB.style.removeProperty("transform");
+      }
+      
+    }
+
+    function showCollectionsBox(){
+      if(collectionsBox.style.display == 'none') {
+        collectionsBox.style.display = 'block';
+        iconC.style.transform = "rotate(180deg)";
+      }
+      else{
+        collectionsBox.style.display = 'none';
+        iconC.style.removeProperty("transform");
+      }
+      
+    }
+
+
+    function editData() {
+      document.getElementById("email").removeAttribute("disabled")
+      submitdiv.style.display = 'block';
+      btnbox.style.display = "block";
+      quick.style.display = "block";
+      document.getElementById("formSubmit").disabled = true;
+    }
+
+    function quitEdit() {
+      document.getElementById("email").disabled = true;
+      submitdiv.style.display = 'none';
+      btnbox.style.display = "none";
+      quick.style.display = "none";
+      document.getElementById("formSubmit").disabled = true;
+    }
+
+    //upload img 
+    var imgfile = document.getElementById("imgfile");
+    imgfile.onchange = function () {
+      //create readerfile object
+      var rd = new FileReader();
+      //get the filename
+      var files = this.files[0];
+      let fileType = files.type.slice(6, 10)
+      //only png type
+      if (fileType != 'png') {
+        alert("Please input image which type is png");
+        return
+      }
+      else {
+        //preview the upload img in the photo position
+        rd.readAsDataURL(files);
+        rd.onloadend = function (e) {
+          document.getElementById("imgbox").src = this.result;
+        }
+      }
+    }
+
+    //submit email
+  function submitEditEmail(){
+    var email = document.getElementById("email").value;
+    var url = "/api/user/update";
+    var body = {
+      email : email
+    }
+    axios.post(url,body)
+    .then(response=>{
+      console.log(response);
+      alert("update email sucssesfully");
+      document.getElementById("email").disabled = true;
+      submitdiv.style.display = 'none';
+    })
+    .catch(err=>{
+      console.log(err);
+      if(err.response.status == 401||err.response.status == 403){
+        alert(err.response.data.message);
+        window.location.href = "/login.html";
+      }
+    })
+  }
+
+  //can't submit the img when you didn't upload one
+  var imgfile = document.getElementById("imgfile");
+  imgfile.oninput = function(){
+    if(imgfile.files){
+      document.getElementById("formSubmit").removeAttribute("disabled");
+    }
+    else{
+      document.getElementById("formSubmit").disabled = true;
+    }
+
+  }
+  
+  // get the logout button
+  let logout = document.getElementById("logoutBtn");
+  logout.onclick = function (event) {
+    event.preventDefault();
+    var url = "/api/auth/logout";
+    axios.get(url).then(function (response) {
+      alert(response.data.message)
+      window.location.href = "/login";
+    }).catch (function (err) {
+      alert(err.response.data.mesaage)
+      window.location.href = "/login";
+    })
+  }
+
+  </script>
+
+  <script src="../bootstrap/bootstrap-5.2.0-beta1-dist/js/bootstrap.js"></script>
+  <script src="../bootstrap/bootstrap-5.2.0-beta1-dist/js/bootstrap.min.js"></script>
+  
+</body>
+
+</html>

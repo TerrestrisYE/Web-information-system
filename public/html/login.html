@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="../bootstrap/bootstrap-5.2.0-beta1-dist/css/bootstrap.css">
+  <link rel="stylesheet" href="../bootstrap/bootstrap-5.2.0-beta1-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css">
+  <link href="../css/signin.css" rel="stylesheet">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body class="text-center">
+  <div class="container" id="signinForm">
+    <main class="form-signin w-100 m-auto">
+      <form>
+        <img class="mb-4" src="../img/Logo.png" alt="" width="140" height="60">
+        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+        <div class="form-floating">
+          <input type="email" class="form-control" id="email1" placeholder="name@example.com">
+          <label for="floatingInput">Email address or username</label>
+        </div>
+        <div class="form-floating">
+          <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+          <label for="floatingPassword">Password</label>
+        </div>
+
+        <div class="checkbox mb-3">
+          <label>
+            <input type="checkbox" value="remember-me" id="remember"> Remember me
+          </label>
+          <p><a href="/reset">Forget password? click it to resset</a></p>
+        </div>
+        <!-- show the error message with red color -->
+        <div id="errorMessage1" class="errorMessage1" style="color: brown;font-weight: bolder"></div>
+
+        <button class="w-100 btn btn-lg btn-primary" type="submit" id="signinSubmit">Sign in</button>
+        <p class="mt-5 mb-3 text-muted">Don't have an account? <a color="red" onclick="showSignupForm()">Sign up</a></p>
+        <p class="mt-5 mb-3 text-muted">&copy; 2022</p>
+      </form>
+    </main>
+  </div>
+  <div class="container" id="signupForm">
+    <main class="form-signin w-100 m-auto">
+      <form>
+        <img class="mb-4" src="../img/Logo.png" alt="" width="140" height="60">
+        <h1 class="h3 mb-3 fw-normal">Join us!</h1>
+
+        <div class="form-floating">
+          <input type="email" class="form-control" id="email2" placeholder="name@example.com">
+          <label for="floatingInput">Email address</label>
+        </div>
+        <div class="form-floating">
+          <input type="text" class="form-control" id="username" placeholder="nick name">
+          <label for="username">username</label>
+        </div>
+        <div class="form-floating">
+          <input type="password" class="form-control" id="floatingPassword1" placeholder="Password">
+          <label for="floatingPassword">Password</label>
+        </div>
+        <div class="form-floating">
+          <input type="password" class="form-control" id="floatingPassword2" placeholder="Confirm Password">
+          <label for="floatingPassword">Confirm Password</label>
+        </div>
+
+        <div class="checkbox mb-3">
+          <label>
+            <input type="checkbox" value="agree" id="agree"> I agree the copyright
+          </label>
+        </div>
+
+        <!-- show the error message with red color -->
+        <div id="errorMessage" class="errorMessage" style="color: brown;font-weight: bolder"></div>
+
+        <button class="w-100 btn btn-lg btn-primary" type="submit" id="signupSubmit">Sign up</button>
+        <p class="mt-5 mb-3 text-muted">Already have an account? <a color="red" onclick="showSigninForm()">Sign in</a>
+        </p>
+        <p class="mt-5 mb-3 text-muted">&copy; 2022</p>
+      </form>
+    </main>
+  </div>
+  <script>
+    var signinForm = document.getElementById('signinForm');
+    var signupForm = document.getElementById('signupForm');
+    function showSigninForm() {
+      signinForm.style.display = 'block';
+      signupForm.style.display = 'none';
+    }
+
+    function showSignupForm() {
+      signinForm.style.display = 'none';
+      signupForm.style.display = 'block';
+    }
+    showSigninForm();
+    //check remenber data
+    window.onload = function () {
+
+      // check the localstorage
+
+
+      let username = localStorage.getItem('username')
+      let password = localStorage.getItem('password')
+      document.getElementById('email1').value = username;
+      document.getElementById('floatingPassword').value = password;
+
+
+      //sign in submit
+      let signinSubmit = document.getElementById("signinSubmit");
+      signinSubmit.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        var email1 = document.getElementById("email1").value;
+        var floatingPassword = document.getElementById("floatingPassword").value;
+        var body = {
+          username: email1,
+          password: floatingPassword
+        };
+
+        // email and password cannot be empty
+        if (email1 === "" || floatingPassword === "") {
+          document.getElementById('errorMessage').innerHTML = 'Email or password cannot be empty';
+          return
+        }
+
+        // if the user choose to click remember me, store these items in localstorage
+        if (document.getElementById("remember").checked) {
+          localStorage.setItem("username", email1);
+          localStorage.setItem("password", floatingPassword);
+          localStorage.setItem("remember", true)
+        } else {
+          localStorage.setItem("username", "");
+          localStorage.setItem("password", "");
+          localStorage.setItem("remember", false)
+        }
+
+        axios.post('/api/auth/login', body)
+          .then(function (response) {
+            alert("successful login");
+            window.location.href = "./profile";
+          })
+          .catch(function (err) {
+            console.log(err);
+            document.getElementById('errorMessage1').innerHTML = err.response.data.message;
+          })
+      })
+
+
+      // signup submit
+      let signupSubmit = document.getElementById('signupSubmit');
+      signupSubmit.addEventListener('click', function (e) {
+        e.preventDefault();
+        var email = document.getElementById('email2').value;
+        var username = document.getElementById('username').value;
+        var password1 = document.getElementById('floatingPassword1').value;
+        var password2 = document.getElementById('floatingPassword2').value;
+
+        // email, username and password cannot be empty
+        if (email === "" || username === "" || password1 === "" || password2 === "") {
+          document.getElementById('errorMessage').innerHTML = 'No field can be empty';
+          return
+        }
+
+        // check the user agreement
+        if (!document.getElementById("agree").checked) {
+          document.getElementById('errorMessage').innerHTML = 'You must agree the copyright';
+          return
+        }
+
+        // check the email format
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (!re.test(email)) {
+          document.getElementById('errorMessage').innerHTML = 'The email format is incorrect';
+          return
+        }
+
+        // check the password strength
+        var strength = 0;
+        if (password1.length >= 8) {
+          strength++;
+        }
+        if (password1.match(/[a-z]/)) {
+          strength++;
+        }
+        if (password1.match(/[A-Z]/)) {
+          strength++;
+        }
+        if (password1.match(/\d/)) {
+          strength++;
+        }
+        if (password1.match(/[\!\@\#\$\%\^\&\*\(\)\_\+\-\=\,\.\/\?\>\<\:\;\'\"\`\~\[\]\{\}\|]/)) {
+          strength++;
+        }
+        if (strength < 4) {
+          document.getElementById('errorMessage').innerHTML = 'The password is too weak, the password must be at least 8 characters, contain at least one lowercase letter, one uppercase letter, one number, and one special character';
+          return
+        }
+
+        // if the password is not the same, show the error message
+        if (password1 !== password2) {
+          document.getElementById('errorMessage').innerHTML = 'The two passwords are not the same';
+          return
+        }
+
+        // clear the error message
+        document.getElementById('errorMessage').innerHTML = '';
+
+        // send back to server
+        var body = {
+          email: email,
+          username: username,
+          password: password1
+        };
+
+        axios.post('/api/auth/signup', body)
+          .then(function (response) {
+            alert(response.data.message);
+            window.location.href = "./login";
+          }).catch(function (err) {
+            console.log(err);
+            document.getElementById('errorMessage').innerHTML = err.response.data.message;
+          })
+      })
+    }
+  </script>
+</body>
+
+</html>

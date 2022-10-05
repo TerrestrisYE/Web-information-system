@@ -1,0 +1,159 @@
+.userdata{
+    margin-top: 2rem;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.left{
+    
+    width: 20rem;
+    display: flex;
+    margin-left: 3rem;
+}
+.right{
+    width: 15rem;
+    display: flex;
+    margin-right: 3rem;
+    justify-content: center;
+}
+
+.btnimg,#formSubmit{
+    width: 100%;
+    background-color:cadetblue;
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+}
+.quick p{
+    color: cadetblue;
+    font-weight: bold;
+}
+.editsubmit{
+    background-color:cadetblue;
+    border: none;
+    border-radius: 0.5rem;
+    position: relative;
+    top:5.3rem;
+    left: 3rem;
+}
+.imgbox{
+    width: 5rem;
+    height: 5rem;
+    border-radius: 5rem;
+    background-color: #a083d4;
+}
+#imgfile{
+    width: 100%;
+}
+.data{
+    margin-left: 2rem;
+    width: 13rem;
+    
+}
+.datarow{
+    flex: 1;
+    display: flex;
+    flex-wrap: nowrap;
+
+}
+.wl{
+    width: 3rem;
+}
+.name{
+    margin-left: 1rem;
+    flex: 1;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+
+.righticon{
+    flex: 1;
+    align-items: center;
+    
+}
+
+.ackbar{
+    padding: 1rem;
+    background-color: #af94e1;
+}
+.answerbar{
+    padding: 1rem;
+    background-color: #a083d4;
+}
+
+.collectionsbar{
+    padding: 1rem;
+    background-color: #8a70b9;
+}
+
+.icon{
+    float: right;
+    margin-right: 2rem;
+}
+.anwsersBox,
+.collectionsBox,.askBox
+{
+    min-height: 10rem;
+}
+
+
+.askItem{
+    margin-top: 1rem;
+    margin-left: 1rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #222;
+}
+
+.userimg{
+    display: inline-block;
+}
+.userimg img{
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 2.5rem;
+    background-color: #8a70b9;
+}
+.username{
+    display: inline-block;
+    color: #444;
+}
+.askdata{
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+.tag h5{
+    color: blueviolet;
+    margin-right: 0.5rem;
+}
+.title,.tag{
+    display: inline-block;
+}
+.content{
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    color: #333;
+}
+.answers{
+    padding-left: 5rem;
+    display: block;
+}
+
+.answerName{
+    font-size: 1rem;
+    color: rgb(106, 133, 133);
+}
+.answerContent{
+    width: 100%;
+    font-size: 0.9rem;
+    color: #555;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    padding-right: 2rem;
+    padding-left: 0.8rem;
+}
